@@ -9,15 +9,16 @@ public class ProcessingApp {
         String servers = args[0];
         String groupId = args[1];
         String sourceTopic = args[2];
-        String targetTopic = args[3];
+        String goodTopic = args[3];
+        String badTopic = args[4];
 
         Reader reader = new Reader(servers, groupId, sourceTopic);
-        Writer writer = new Writer(servers, targetTopic);
+        Validator validator = new Validator(servers, goodTopic, badTopic);
 
-        while (true) { // 1
+        while (true) {
             ConsumerRecords<String, String> consumeRecords = reader.consume();
             for (ConsumerRecord<String, String> record : consumeRecords) {
-                writer.produce(record.value()); // 2
+                validator.produce(record.value());
             }
         }
     }
